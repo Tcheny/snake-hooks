@@ -4,21 +4,24 @@ import Food from "./Food";
 
 const App = () => {
     const [snakeDots, setSnakeDot] = useState([[0, 0], [2, 0], [4, 0]]);
-    const [food, setFood] = useState([Math.floor(Math.random() * 100), Math.floor(Math.random() * 100)]);
+    const [food, setFood] = useState([Math.floor((Math.random() * 100 / 2)) * 2, Math.floor((Math.random() * 100 / 2)) * 2]);
     const [direction, setDirection] = useState('RIGHT');
+    const [speed, setSpeed] = useState(200);
 
     useEffect(() => {
-        const interval = setInterval(moveSnake, 200);
+        const interval = setInterval(moveSnake, speed);
         document.onkeydown = onKeyDown;
 
         return () => clearInterval(interval)
     })
 
-
+    useEffect(() => {
+        checkIfOut();
+        checkIfCollapsed();
+        checkIfEat();
+    })
 
     const onKeyDown = (e) => {
-        // e = e || window.event;
-
         switch (e.keyCode) {
             case 38:
                 setDirection('UP')
@@ -39,7 +42,6 @@ const App = () => {
 
     const moveSnake = () => {
         let dots = [...snakeDots];
-
         let head = dots[dots.length - 1];
 
         switch (direction) {
@@ -62,7 +64,52 @@ const App = () => {
         dots.push(head);
         dots.shift();
         setSnakeDot(dots)
+    }
 
+    const checkIfOut = () => {
+        let head = snakeDots[snakeDots.length - 1];
+        if (head[0] >= 100 || head[1] >= 100 || head[0] < 0 || head[1] < 0) {
+            gameOver();
+        }
+    }
+
+    const checkIfCollapsed = () => {
+        let snake = [...snakeDots];
+        let head = snake[snake.length -1];
+        snake.pop();
+        snake.forEach(dot => {
+            if (head[0] === dot[0] && head[1] === dot[1]) {
+                gameOver();
+            }
+        })
+    }
+
+    const checkIfEat = () => {
+        let head = snakeDots[snakeDots.length - 1];
+        if (head[0] === food[0] && head[1] === food[1]) {
+            setFood([Math.floor((Math.random() * 100 / 2)) * 2, Math.floor((Math.random() * 100 / 2)) * 2]);
+            enLargeSnake();
+            increaseSpeed();
+        }
+    }
+
+    const enLargeSnake = () => {
+        let newSnake = [...snakeDots];
+        newSnake.unshift([]);
+        setSnakeDot(newSnake);
+    }
+
+    const increaseSpeed = () => {
+        if (speed > 50) {
+            setSpeed(speed - 10);
+        }
+    }
+
+    const gameOver = () => {
+        alert(`game over`)
+        setSnakeDot([[0, 0], [2, 0], [4, 0]]);
+        setFood([Math.floor((Math.random() * 100 / 2)) * 2, Math.floor((Math.random() * 100 / 2)) * 2])
+        setDirection('RIGHT')
     }
 
     return (
