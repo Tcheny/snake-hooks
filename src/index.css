@@ -15,11 +15,9 @@
     z-index: 2;
 }
 
-.food {
+.fas{
     position: absolute;
-    width: 2%;
-    height: 2%;
-    background-color: red;
-    border: 1px solid #fff;
+    color: #d11d1d;
+    font-size: 14px;
     z-index: 1;
 }

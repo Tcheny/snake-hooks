@@ -110,6 +110,7 @@ const App = () => {
         setSnakeDot([[0, 0], [2, 0], [4, 0]]);
         setFood([Math.floor((Math.random() * 100 / 2)) * 2, Math.floor((Math.random() * 100 / 2)) * 2])
         setDirection('RIGHT')
+        setSpeed(200)
     }
 
     return (

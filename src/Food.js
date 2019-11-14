@@ -6,6 +6,9 @@ export default (props) => {
         top: `${props.food[1]}%`
     }
     return (
-        <div className='food' style={style}></div>
+
+            <i style={style} className="food fas fa-apple-alt"></i>
+
+
     )
 }
